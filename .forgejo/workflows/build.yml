@@ -27,13 +27,10 @@ jobs:
       - name: Setup Rust
         uses: https://git.smalls.online/smallsonline-actions/setup-rs@v1
 
-      - name: Install cargo-binstall
-        uses: https://github.com/cargo-bins/cargo-binstall@main
-
       - name: Install cargo-make
         shell: bash
         run: | 
-          cargo binstall cargo-make --force
+          cargo install --force cargo-make
 
       - name: Build project
         shell: bash
