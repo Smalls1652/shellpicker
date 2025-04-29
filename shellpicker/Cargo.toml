@@ -1,0 +1,20 @@
+[package]
+name = "shellpicker"
+version = "0.1.0"
+
+edition.workspace = true
+authors.workspace = true
+homepage.workspace = true
+repository.workspace = true
+license-file.workspace = true
+
+[[bin]]
+name = "sp"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+crossterm = { workspace = true }
+serde = { workspace = true }
+serde_yaml = { workspace = true }
+thiserror = { workspace = true }

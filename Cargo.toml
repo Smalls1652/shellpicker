@@ -1,0 +1,18 @@
+[workspace]
+members = ["shellpicker"]
+resolver = "2"
+
+package.edition = "2024"
+package.authors = [
+    "Timothy Small"
+]
+package.homepage = "https://git.smalls.online/smalls/shellpicker"
+package.repository = "https://git.smalls.online/smalls/shellpicker"
+package.license-file = "LICENSE"
+
+[workspace.dependencies]
+anyhow = { version = "1.0.98" }
+crossterm = { version = "0.29.0" }
+serde = { version = "1.0.219", features = ["derive"] }
+serde_yaml = { version = "0.9.34" }
+thiserror = { version = "2.0.12" }
