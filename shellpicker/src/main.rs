@@ -65,6 +65,12 @@ fn main() -> Result<()> {
     let mut command = std::process::Command::new(selected_shell.path);
     command.args(selected_shell.args);
     command.current_dir(&home_dir);
+    
+    if let Some(env_vars) = selected_shell.env_vars {
+        for env_var in env_vars {
+            command.env(env_var.name, env_var.value);
+        }
+    }
 
     match cfg!(target_os = "windows") {
         true => {

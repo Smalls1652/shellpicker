@@ -36,8 +36,8 @@ impl ConfigFile {
                 Ok(
                     ConfigFile {
                         shells: vec![
-                            ShellItem::new("PowerShell", PathBuf::from("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"), vec![]),
-                            ShellItem::new("Command Prompt", PathBuf::from("C:\\Windows\\System32\\cmd.exe"), vec![]),
+                            ShellItem::new("PowerShell", PathBuf::from("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"), vec![], None),
+                            ShellItem::new("Command Prompt", PathBuf::from("C:\\Windows\\System32\\cmd.exe"), vec![], None),
                         ]
                     }
                 )
@@ -56,7 +56,7 @@ impl ConfigFile {
                 Ok(
                     ConfigFile {
                         shells: vec![
-                            ShellItem::new(default_shell_filename, default_shell_path, vec![])
+                            ShellItem::new(default_shell_filename, default_shell_path, vec![], None)
                         ]
                     }
                 )
@@ -69,13 +69,20 @@ impl ConfigFile {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct ShellItem {
     /// The name of the shell.
+    #[serde(rename = "name")]
     pub name: String,
 
     /// The path to the shell.
+    #[serde(rename = "path")]
     pub path: PathBuf,
 
     /// Arguments to supply to the shell.
-    pub args: Vec<String>
+    #[serde(rename = "args")]
+    pub args: Vec<String>,
+
+    /// Optional environment variables to pass to the shell.
+    #[serde(rename = "env", skip_serializing_if = "Option::is_none")]
+    pub env_vars: Option<Vec<ShellItemEnvironmentVariable>>
 }
 
 impl ShellItem {
@@ -86,11 +93,25 @@ impl ShellItem {
     /// * `name` - The name of the shell.
     /// * `path` - The path to the shell.
     /// * `args` - Arguments to supply to the shell.
-    pub fn new(name: &str, path: PathBuf, args: Vec<&str>) -> Self {
+    /// * `env_vars` - Optional environment variables to pass to the shell.
+    pub fn new(name: &str, path: PathBuf, args: Vec<&str>, env_vars: Option<Vec<ShellItemEnvironmentVariable>>) -> Self {
         ShellItem {
             name: name.to_string(),
             path,
             args: args.iter().map(|&arg| arg.to_string()).collect(),
+            env_vars
         }
     }
+}
+
+/// An environment variable to pass to a shell process.
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct ShellItemEnvironmentVariable {
+    /// The name of the environment variable.
+    #[serde(rename = "name")]
+    pub name: String,
+
+    /// The value of the environment variable.
+    #[serde(rename = "value")]
+    pub value: String
 }
